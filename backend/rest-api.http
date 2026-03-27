@@ -1,0 +1,44 @@
+### Base URL API
+@BASE_URL = {{$dotenv BASE_URL}}
+@adminUsername = {{$dotenv OVS_ADMIN_USERNAME}}
+@adminPassword = {{$dotenv OVS_ADMIN_PASSWORD}}
+@studentId = {{$dotenv OVS_STUDENT_ID}}
+@studentPassword = {{$dotenv OVS_STUDENT_PASSWORD}}
+
+### Health Check
+GET {{BASE_URL}}/api/health
+
+### Admin Login
+# @name adminLogin
+POST {{BASE_URL}}/api/auth/admin/login
+Content-Type: application/json
+
+{
+  "username": "{{adminUsername}}",
+  "password": "{{adminPassword}}"
+}
+
+### Logout Admin
+POST {{BASE_URL}}/api/auth/admin/logout
+Content-Type: application/json
+Authorization: Bearer {{adminLogin.response.body.token}}
+
+{}
+
+### Student Login
+# @name studentLogin
+POST {{BASE_URL}}/api/auth/student/login
+Content-Type: application/json
+X-Client-Type: mobile
+
+{
+  "student_id": "{{studentId}}",
+  "password": "{{studentPassword}}"
+}
+
+### Logout Student
+POST {{BASE_URL}}/api/auth/student/logout
+Content-Type: application/json
+Authorization: Bearer {{studentLogin.response.body.token}}
+
+{}

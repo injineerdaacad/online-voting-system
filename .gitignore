@@ -1,0 +1,78 @@
+# General dependencies
+node_modules/
+
+# Logs and diagnostics
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.tsbuildinfo
+
+# Build outputs
+build/
+dist/
+dist-ssr/
+coverage/
+web-build/
+.expo/
+expo-env.d.ts
+
+# Framework-specific
+.vitepress/
+.vite/
+.next/
+
+# Expo / React Native
+android/app/build/
+android/.gradle/
+**/.expo/
+**/web-build/
+**/*.orig.*
+
+# Environment files
+.env
+*.env.local
+backend/.env
+frontend/.env
+mobile/.env
+
+# Uploads and storage
+uploads/
+backend/uploads/
+
+# Cache directories
+.npm/
+.yarn/
+.pnpm-store/
+
+# IDE & Editor settings
+.vscode/
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# macOS & Windows files
+.DS_Store
+Thumbs.db
+
+# Archive snapshots
+*.zip
+*.tar
+*.tar.gz
+
+# Misc project-specific
+app-example
+**/debug.log
+**/dump/

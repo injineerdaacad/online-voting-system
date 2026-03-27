@@ -1,0 +1,642 @@
+
+
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
+
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark, .dark *));
+
+@theme {
+  
+  --font-*: initial;
+  --font-outfit: Outfit, sans-serif;
+
+  --breakpoint-*: initial;
+  --breakpoint-2xsm: 375px;
+  --breakpoint-xsm: 425px;
+  --breakpoint-3xl: 2000px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+
+  --text-title-2xl: 72px;
+  --text-title-2xl--line-height: 90px;
+  --text-title-xl: 60px;
+  --text-title-xl--line-height: 72px;
+  --text-title-lg: 48px;
+  --text-title-lg--line-height: 60px;
+  --text-title-md: 36px;
+  --text-title-md--line-height: 44px;
+  --text-title-sm: 30px;
+  --text-title-sm--line-height: 38px;
+  --text-theme-xl: 20px;
+  --text-theme-xl--line-height: 30px;
+  --text-theme-sm: 14px;
+  --text-theme-sm--line-height: 20px;
+  --text-theme-xs: 12px;
+  --text-theme-xs--line-height: 18px;
+
+  --color-current: currentColor;
+  --color-transparent: transparent;
+  --color-white: #ffffff;
+  --color-black: #101828;
+
+  --color-university-gold-25: #fefdf8;
+  --color-university-gold-50: #fdf9e7;
+  --color-university-gold-100: #faf1c7;
+  --color-university-gold-200: #f5e19c;
+  --color-university-gold-300: #edc96b;
+  --color-university-gold-400: #e4b03e;
+  --color-university-gold-500: #d4a017;
+  --color-university-gold-600: #b88a0e;
+  --color-university-gold-700: #9c7309;
+  --color-university-gold-800: #805c06;
+  --color-university-gold-900: #644504;
+  --color-university-gold-950: #482e02;
+
+  --color-university-blue-25: #f0f9ff;
+  --color-university-blue-50: #e0f2fe;
+  --color-university-blue-100: #b9e6fe;
+  --color-university-blue-200: #7cd4fd;
+  --color-university-blue-300: #36bffa;
+  --color-university-blue-400: #0ba5ec;
+  --color-university-blue-500: #0086c9;
+  --color-university-blue-600: #026aa2;
+  --color-university-blue-700: #065986;
+  --color-university-blue-800: #0b4a6f;
+  --color-university-blue-900: #062c41;
+  --color-university-blue-950: #031a28;
+
+  --color-university-red-25: #fffbfa;
+  --color-university-red-50: #fef3f2;
+  --color-university-red-100: #fee4e2;
+  --color-university-red-200: #fecdca;
+  --color-university-red-300: #fda29b;
+  --color-university-red-400: #f97066;
+  --color-university-red-500: #f04438;
+  --color-university-red-600: #d92d20;
+  --color-university-red-700: #b42318;
+  --color-university-red-800: #912018;
+  --color-university-red-900: #7a271a;
+  --color-university-red-950: #55160c;
+
+  --color-university-pink-25: #fef7f7;
+  --color-university-pink-50: #fdeef0;
+  --color-university-pink-100: #fbdde2;
+  --color-university-pink-200: #f7bcc6;
+  --color-university-pink-300: #f195a5;
+  --color-university-pink-400: #e86b82;
+  --color-university-pink-500: #dd4a67;
+  --color-university-pink-600: #c93d5a;
+  --color-university-pink-700: #a8324a;
+  --color-university-pink-800: #8a2c3d;
+  --color-university-pink-900: #722a35;
+  --color-university-pink-950: #3f1419;
+
+  --color-brand-25: var(--color-university-gold-25);
+  --color-brand-50: var(--color-university-gold-50);
+  --color-brand-100: var(--color-university-gold-100);
+  --color-brand-200: var(--color-university-gold-200);
+  --color-brand-300: var(--color-university-gold-300);
+  --color-brand-400: var(--color-university-gold-400);
+  --color-brand-500: var(--color-university-gold-500);
+  --color-brand-600: var(--color-university-gold-600);
+  --color-brand-700: var(--color-university-gold-700);
+  --color-brand-800: var(--color-university-gold-800);
+  --color-brand-900: var(--color-university-gold-900);
+  --color-brand-950: var(--color-university-gold-950);
+
+  --color-gray-25: #fcfcfd;
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f2f4f7;
+  --color-gray-200: #e4e7ec;
+  --color-gray-300: #d0d5dd;
+  --color-gray-400: #98a2b3;
+  --color-gray-500: #667085;
+  --color-gray-600: #475467;
+  --color-gray-700: #344054;
+  --color-gray-800: #1d2939;
+  --color-gray-900: #101828;
+  --color-gray-950: #0c111d;
+  --color-gray-dark: #1a2231;
+
+  --color-success-25: #f6fef9;
+  --color-success-50: #ecfdf3;
+  --color-success-100: #d1fadf;
+  --color-success-200: #a6f4c5;
+  --color-success-300: #6ce9a6;
+  --color-success-400: #32d583;
+  --color-success-500: #12b76a;
+  --color-success-600: #039855;
+  --color-success-700: #027a48;
+  --color-success-800: #05603a;
+  --color-success-900: #054f31;
+  --color-success-950: #053321;
+
+  --color-error-25: var(--color-university-red-25);
+  --color-error-50: var(--color-university-red-50);
+  --color-error-100: var(--color-university-red-100);
+  --color-error-200: var(--color-university-red-200);
+  --color-error-300: var(--color-university-red-300);
+  --color-error-400: var(--color-university-red-400);
+  --color-error-500: var(--color-university-red-500);
+  --color-error-600: var(--color-university-red-600);
+  --color-error-700: var(--color-university-red-700);
+  --color-error-800: var(--color-university-red-800);
+  --color-error-900: var(--color-university-red-900);
+  --color-error-950: var(--color-university-red-950);
+
+  --color-warning-25: #fffcf5;
+  --color-warning-50: #fffaeb;
+  --color-warning-100: #fef0c7;
+  --color-warning-200: #fedf89;
+  --color-warning-300: #fec84b;
+  --color-warning-400: #fdb022;
+  --color-warning-500: #f79009;
+  --color-warning-600: #dc6803;
+  --color-warning-700: #b54708;
+  --color-warning-800: #93370d;
+  --color-warning-900: #7a2e0e;
+  --color-warning-950: #4e1d09;
+
+  --shadow-theme-md: 0px 4px 8px -2px rgba(16, 24, 40, 0.1),
+    0px 2px 4px -2px rgba(16, 24, 40, 0.06);
+  --shadow-theme-lg: 0px 12px 16px -4px rgba(16, 24, 40, 0.08),
+    0px 4px 6px -2px rgba(16, 24, 40, 0.03);
+  --shadow-theme-sm: 0px 1px 3px 0px rgba(16, 24, 40, 0.1),
+    0px 1px 2px 0px rgba(16, 24, 40, 0.06);
+  --shadow-theme-xs: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+  --shadow-theme-xl: 0px 20px 24px -4px rgba(16, 24, 40, 0.08),
+    0px 8px 8px -4px rgba(16, 24, 40, 0.03);
+  --shadow-focus-ring: 0px 0px 0px 4px rgba(212, 160, 23, 0.12);
+
+  --z-index-1: 1;
+  --z-index-9: 9;
+  --z-index-99: 99;
+  --z-index-999: 999;
+  --z-index-9999: 9999;
+  --z-index-99999: 99999;
+  --z-index-999999: 999999;
+}
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+  
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  
+  body {
+    @apply relative font-normal font-outfit z-1 bg-gray-50 dark:bg-slate-900;
+  }
+}
+
+.btn {
+  @apply inline-flex items-center justify-center px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.btn-primary {
+  @apply bg-gradient-to-r from-university-gold-600 to-university-gold-700 text-white hover:from-university-gold-700 hover:to-university-gold-800 focus:ring-university-gold-500 shadow-md hover:shadow-lg;
+}
+
+.btn-secondary {
+  @apply bg-gradient-to-r from-university-blue-100 to-university-blue-200 text-university-blue-900 hover:from-university-blue-200 hover:to-university-blue-300 focus:ring-university-blue-500 border border-university-blue-300 dark:bg-university-blue-800 dark:text-university-blue-100 dark:border-university-blue-600;
+}
+
+.btn-success {
+  @apply bg-gradient-to-r from-success-600 to-success-700 text-white hover:from-success-700 hover:to-success-800 focus:ring-success-500 shadow-md hover:shadow-lg;
+}
+
+.btn-warning {
+  @apply bg-gradient-to-r from-warning-600 to-warning-700 text-white hover:from-warning-700 hover:to-warning-800 focus:ring-warning-500 shadow-md hover:shadow-lg;
+}
+
+.btn-error {
+  @apply bg-gradient-to-r from-university-red-600 to-university-red-700 text-white hover:from-university-red-700 hover:to-university-red-800 focus:ring-university-red-500 shadow-md hover:shadow-lg;
+}
+
+.btn-ghost {
+  @apply bg-transparent text-university-gold-600 hover:bg-university-gold-50 focus:ring-university-gold-500 border border-university-gold-200 dark:text-university-gold-400 dark:hover:bg-university-gold-900/20 dark:border-university-gold-800;
+}
+
+.card {
+  @apply bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-gray-200 dark:border-slate-700 overflow-hidden;
+}
+
+.card-header {
+  @apply px-6 py-4 border-b border-gray-200 dark:border-slate-700 bg-gradient-to-r from-university-gold-50 to-university-blue-50 dark:from-slate-700 dark:to-slate-600;
+}
+
+.card-body {
+  @apply p-6;
+}
+
+.card-footer {
+  @apply px-6 py-4 border-t border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-700;
+}
+
+.form-group {
+  @apply mb-6;
+}
+
+.form-label {
+  @apply block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2;
+}
+
+.form-input {
+  @apply w-full px-4 py-3 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-university-gold-500 focus:border-transparent transition-all duration-200;
+}
+
+.form-input:focus {
+  @apply shadow-md;
+}
+
+.form-input.error {
+  @apply border-university-red-500 focus:ring-university-red-500;
+}
+
+.form-error {
+  @apply mt-1 text-sm text-university-red-600 dark:text-university-red-400;
+}
+
+.form-help {
+  @apply mt-1 text-sm text-gray-500 dark:text-gray-400;
+}
+
+.modal-overlay {
+  @apply fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4;
+}
+
+.modal-content {
+  @apply bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto;
+}
+
+.modal-header {
+  @apply px-6 py-4 border-b border-gray-200 dark:border-slate-700 flex items-center justify-between;
+}
+
+.modal-body {
+  @apply px-6 py-4;
+}
+
+.modal-footer {
+  @apply px-6 py-4 border-t border-gray-200 dark:border-slate-700 flex items-center justify-end space-x-3;
+}
+
+.nav-item {
+  @apply flex items-center px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 rounded-lg transition-all duration-200 hover:bg-university-gold-50 dark:hover:bg-university-gold-900/20 hover:text-university-gold-700 dark:hover:text-university-gold-300;
+}
+
+.nav-item.active {
+  @apply bg-gradient-to-r from-university-gold-100 to-university-blue-100 dark:from-university-gold-900/30 dark:to-university-blue-900/30 text-university-gold-700 dark:text-university-gold-300 shadow-sm;
+}
+
+.table {
+  @apply w-full border-collapse bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-lg;
+}
+
+.table th {
+  @apply px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider bg-gray-50 dark:bg-slate-700 border-b border-gray-200 dark:border-slate-700;
+}
+
+.table td {
+  @apply px-6 py-4 text-sm text-gray-900 dark:text-gray-100 border-b border-gray-200 dark:border-slate-700;
+}
+
+.table tbody tr:hover {
+  @apply bg-gray-50 dark:bg-slate-700;
+}
+
+.badge {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+}
+
+.badge-primary {
+  @apply bg-university-gold-100 text-university-gold-800 dark:bg-university-gold-900/30 dark:text-university-gold-300;
+}
+
+.badge-secondary {
+  @apply bg-university-blue-100 text-university-blue-800 dark:bg-university-blue-900/30 dark:text-university-blue-300;
+}
+
+.badge-success {
+  @apply bg-success-100 text-success-800 dark:bg-success-900/30 dark:text-success-300;
+}
+
+.badge-warning {
+  @apply bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-warning-300;
+}
+
+.badge-error {
+  @apply bg-university-red-100 text-university-red-800 dark:bg-university-red-900/30 dark:text-university-red-300;
+}
+
+.badge-neutral {
+  @apply bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300;
+}
+
+.alert {
+  @apply p-4 rounded-lg border;
+}
+
+.alert-success {
+  @apply bg-success-50 border-success-200 text-success-800 dark:bg-success-900/20 dark:border-success-800 dark:text-success-300;
+}
+
+.alert-warning {
+  @apply bg-warning-50 border-warning-200 text-warning-800 dark:bg-warning-900/20 dark:border-warning-800 dark:text-warning-300;
+}
+
+.alert-error {
+  @apply bg-university-red-50 border-university-red-200 text-university-red-800 dark:bg-university-red-900/20 dark:border-university-red-800 dark:text-university-red-300;
+}
+
+.alert-info {
+  @apply bg-university-gold-50 border-university-gold-200 text-university-gold-800 dark:bg-university-gold-900/20 dark:border-university-gold-800 dark:text-university-gold-300;
+}
+
+.loading-spinner {
+  @apply animate-spin rounded-full border-2 border-gray-300 border-t-university-gold-600;
+}
+
+.loading-dots {
+  @apply flex space-x-1;
+}
+
+.loading-dots div {
+  @apply w-2 h-2 bg-university-gold-600 rounded-full animate-pulse;
+}
+
+.loading-dots div:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.loading-dots div:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.gradient-primary {
+  @apply bg-gradient-to-r from-university-gold-600 to-university-gold-700;
+}
+
+.gradient-secondary {
+  @apply bg-gradient-to-r from-university-blue-600 to-university-blue-700;
+}
+
+.gradient-accent {
+  @apply bg-gradient-to-r from-university-red-600 to-university-red-700;
+}
+
+.gradient-success {
+  @apply bg-gradient-to-r from-success-600 to-success-700;
+}
+
+.gradient-warning {
+  @apply bg-gradient-to-r from-warning-600 to-warning-700;
+}
+
+.gradient-error {
+  @apply bg-gradient-to-r from-university-red-600 to-university-red-700;
+}
+
+.glass {
+  @apply bg-white/10 backdrop-blur-md border border-white/20;
+}
+
+.glass-dark {
+  @apply bg-black/10 backdrop-blur-md border border-black/20;
+}
+
+.hover-lift {
+  @apply transition-all duration-200 hover:transform hover:-translate-y-1 hover:shadow-lg;
+}
+
+.hover-glow {
+  @apply transition-all duration-200 hover:shadow-lg hover:shadow-university-gold-500/25;
+}
+
+@utility university-primary {
+  @apply text-university-gold-500 bg-university-gold-500;
+}
+
+@utility university-secondary {
+  @apply text-university-blue-500 bg-university-blue-500;
+}
+
+@utility university-accent {
+  @apply text-university-red-500 bg-university-red-500;
+}
+
+@utility university-subtle {
+  @apply text-university-pink-500 bg-university-pink-500;
+}
+
+@utility menu-item {
+  @apply relative flex items-center w-full gap-3 px-3 py-2 font-medium rounded-lg text-theme-sm;
+}
+
+@utility menu-item-active {
+  @apply bg-university-gold-50 text-university-gold-500 dark:bg-university-gold-500/[0.12] dark:text-university-gold-400;
+}
+
+@utility menu-item-inactive {
+  @apply text-gray-700 hover:bg-gray-100 group-hover:text-gray-700 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-gray-300;
+}
+
+@utility menu-item-icon {
+  @apply text-gray-500 group-hover:text-gray-700 dark:text-gray-400;
+}
+
+@utility menu-item-icon-active {
+  @apply text-university-gold-500 dark:text-university-gold-400;
+}
+
+@utility no-scrollbar {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@utility custom-scrollbar {
+  &::-webkit-scrollbar {
+    @apply size-1.5;
+  }
+
+  &::-webkit-scrollbar-track {
+    @apply rounded-full;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    @apply bg-gray-200 rounded-full dark:bg-gray-700;
+  }
+}
+
+@utility scrollbar-thin {
+  &::-webkit-scrollbar {
+    @apply h-2;
+  }
+
+  &::-webkit-scrollbar-track {
+    @apply rounded-full;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    @apply rounded-full;
+  }
+}
+
+@utility scrollbar-thumb-university-gold-300 {
+  &::-webkit-scrollbar-thumb {
+    @apply bg-university-gold-300;
+  }
+}
+
+@utility scrollbar-thumb-university-gold-600 {
+  &::-webkit-scrollbar-thumb {
+    @apply bg-university-gold-600;
+  }
+}
+
+@utility scrollbar-track-gray-100 {
+  &::-webkit-scrollbar-track {
+    @apply bg-gray-100;
+  }
+}
+
+@utility scrollbar-track-gray-800 {
+  &::-webkit-scrollbar-track {
+    @apply bg-gray-800;
+  }
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #344054;
+}
+
+@media (max-width: 640px) {
+  .card {
+    @apply rounded-lg;
+  }
+  
+  .modal-content {
+    @apply rounded-xl mx-2;
+  }
+  
+  .btn {
+    @apply px-3 py-2 text-xs;
+  }
+}
+
+@media (max-width: 480px) {
+  .card-body {
+    @apply p-4;
+  }
+  
+  .modal-body {
+    @apply px-4 py-3;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.animate-fade-in-down {
+  animation: fadeInDown 0.5s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.5s ease-out;
+}
+
+.focus-university {
+  @apply focus:outline-none focus:ring-2 focus:ring-university-gold-500 focus:ring-offset-2;
+}
+
+.focus-university-blue {
+  @apply focus:outline-none focus:ring-2 focus:ring-university-blue-500 focus:ring-offset-2;
+}
+
+.focus-university-red {
+  @apply focus:outline-none focus:ring-2 focus:ring-university-red-500 focus:ring-offset-2;
+}
+
+.text-gradient-gold {
+  @apply bg-gradient-to-r from-university-gold-600 to-university-gold-800 bg-clip-text text-transparent;
+}
+
+.text-gradient-blue {
+  @apply bg-gradient-to-r from-university-blue-600 to-university-blue-800 bg-clip-text text-transparent;
+}
+
+.text-gradient-university {
+  @apply bg-gradient-to-r from-university-gold-600 to-university-blue-600 bg-clip-text text-transparent;
+}
+
+.border-university-gold {
+  @apply border-university-gold-200 dark:border-university-gold-800;
+}
+
+.border-university-blue {
+  @apply border-university-blue-200 dark:border-university-blue-800;
+}
+
+.border-university-red {
+  @apply border-university-red-200 dark:border-university-red-800;
+}
+
+.bg-university-gradient {
+  @apply bg-gradient-to-br from-university-gold-50 via-white to-university-blue-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900;
+}
+
+.bg-university-card {
+  @apply bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700;
+}
+
+.bg-university-header {
+  @apply bg-gradient-to-r from-university-gold-50 to-university-blue-50 dark:from-slate-700 dark:to-slate-600;
+}

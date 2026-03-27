@@ -1,0 +1,97 @@
+### Gemini AI Assistant API (student-only)
+@BASE_URL = {{$dotenv BASE_URL}}
+@studentId = {{$dotenv OVS_STUDENT_ID}}
+@studentPassword = {{$dotenv OVS_STUDENT_PASSWORD}}
+@studentToken = {{StudentLogin.response.body.token}}
+
+### 1) Student Login
+# @name StudentLogin
+POST {{BASE_URL}}/api/auth/student/login
+Content-Type: application/json
+X-Client-Type: mobile
+
+{
+  "student_id": "{{studentId}}",
+  "password": "{{studentPassword}}"
+}
+
+### 2) AI Assistant – Somali (Doorashooyinka Active)
+# @name AIAssistantSomali
+POST {{BASE_URL}}/api/ai/assistant
+Content-Type: application/json
+Authorization: Bearer {{studentToken}}
+X-Client-Type: mobile
+
+{
+  "message": "Doorashooyinka Active",
+  "language": "so"
+}
+
+### 3) AI Assistant – English
+# @name AIAssistantEnglish
+POST {{BASE_URL}}/api/ai/assistant
+Content-Type: application/json
+Authorization: Bearer {{studentToken}}
+X-Client-Type: mobile
+
+{
+  "message": "What are the active elections?",
+  "language": "en"
+}
+
+### 4) AI Assistant – Simple (Layer 1: sidee loo codeeyaa – no Gemini)
+# @name AIAssistantSimple
+POST {{BASE_URL}}/api/ai/assistant
+Content-Type: application/json
+Authorization: Bearer {{studentToken}}
+X-Client-Type: mobile
+
+{
+  "message": "sidee loo codeeyaa?",
+  "language": "so"
+}
+
+### 5) AI Assistant – Schedule (Layer 2: Jadwalka – context only)
+# @name AIAssistantSchedule
+POST {{BASE_URL}}/api/ai/assistant
+Content-Type: application/json
+Authorization: Bearer {{studentToken}}
+X-Client-Type: mobile
+
+{
+  "message": "Jadwalka Doorashada",
+  "language": "so"
+}
+
+### 6) AI Assistant – Unauthorized (no token) → 401
+# @name AIAssistantNoAuth
+POST {{BASE_URL}}/api/ai/assistant
+Content-Type: application/json
+
+{
+  "message": "Doorashooyinka Active",
+  "language": "so"
+}
+
+### 7) AI Assistant – Bad request (empty message) → 400
+# @name AIAssistantBadRequest
+POST {{BASE_URL}}/api/ai/assistant
+Content-Type: application/json
+Authorization: Bearer {{studentToken}}
+
+{
+  "message": "",
+  "language": "so"
+}
+
+### Ask Gemini AI Assistant a different question
+# @name AIAssistantDifferentQuestion
+POST {{BASE_URL}}/api/ai/assistant
+Content-Type: application/json
+Authorization: Bearer {{studentToken}}
+X-Client-Type: mobile
+
+{
+  "message": "Waa maxay habka codbixinta?",
+  "language": "so"
+}

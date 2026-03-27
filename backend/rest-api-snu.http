@@ -1,0 +1,11 @@
+### SNU University API
+@BASE_URL = {{$dotenv UNIVERSITY_API_URL}}
+@studentId = {{$dotenv OVS_STUDENT_ID}}
+
+### Get Student Info
+POST {{BASE_URL}}/api/student-list
+Content-Type: application/json
+
+{
+  "student_id": "{{studentId}}"
+}

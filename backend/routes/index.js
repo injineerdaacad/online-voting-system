@@ -1,0 +1,11 @@
+export { default as userRoutes } from "./userRoutes.js";
+export { default as authRoutes } from "./authRoutes.js";
+export { default as sessionRoutes } from "./sessionRoutes.js";
+export { default as facultyRoutes } from "./facultyRoutes.js";
+export { default as departmentRoutes } from "./departmentRoutes.js";
+export { default as electionRoutes } from "./electionRoutes.js";
+export { default as candidateRoutes } from "./candidateRoutes.js";
+export { default as voteRoutes } from "./voteRoutes.js";
+export { default as resultRoutes } from "./resultRoutes.js";
+export { default as notificationRoutes } from "./notificationRoutes.js";
+export { default as aiAssistantRoutes } from "./aiAssistantRoutes.js";
