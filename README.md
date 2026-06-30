@@ -175,34 +175,116 @@ online-voting-system/
 ## Getting Started
 
 ### Prerequisites
-- Node.js 18+
-- npm
-- MongoDB
-- Cloudinary account (optional)
+- Docker and Docker Compose
+- MongoDB (local)
+- Node.js 18+ (for non-Docker setup)
 
-### Install
+### Clone the Repository
 ```bash
 git clone https://github.com/injineerdaacad/online-voting-system.git
 cd online-voting-system
+```
 
+---
+
+## Docker Commands
+
+### Build (First Time or After Code Changes)
+
+```bash
+docker compose build
+```
+
+### Start the Application
+
+```bash
+docker compose up -d
+```
+
+### Seed the Database (Run Once After the First Start)
+
+```bash
+docker exec ovs-backend node seeds/seedFaculty.js
+docker exec ovs-backend node seeds/seedDepartment.js
+docker exec ovs-backend node seeds/seedSuperAdmin.js
+docker exec ovs-backend node seeds/seedFacultyAdmins.js
+```
+
+### Stop the Application
+
+```bash
+docker compose down
+```
+
+### View Logs (Debugging)
+
+```bash
+# All services
+docker compose logs -f
+
+# Backend only
+docker compose logs -f backend
+
+# Frontend only
+docker compose logs -f frontend
+```
+
+### Check Running Containers
+
+```bash
+docker ps
+```
+
+### Application URLs
+
+| Service  | URL                       |
+| -------- | ------------------------- |
+| Frontend | http://localhost:5173     |
+| Backend  | http://localhost:3000     |
+| Mobile   | http://localhost:8081     |
+
+### Default Login
+
+**Username:** `honest`
+**Password:** `Honest-11`
+
+---
+
+### Quick Reference
+
+| Task             | Command                                                        |
+| ---------------- | -------------------------------------------------------------- |
+| Build            | `docker compose build`                                         |
+| Start            | `docker compose up -d`                                         |
+| Stop             | `docker compose down`                                          |
+| View Logs        | `docker compose logs -f`                                       |
+| Seed Super Admin | `docker exec ovs-backend node seeds/seedSuperAdmin.js`         |
+
+> **Note:** `sudo snap restart docker` **does not stop your application**. It restarts the Docker service itself. To stop the Online Voting System, use:
+>
+> ```bash
+> docker compose down
+> ```
+
+---
+
+### Manual Setup (Without Docker)
+
+```bash
 cd backend && npm install
 cd ../frontend && npm install
 cd ../mobile && npm install
 ```
 
-### Run (development)
 ```bash
 # Terminal 1
-cd backend
-npm run dev
+cd backend && npm run dev
 
 # Terminal 2
-cd frontend
-npm run dev
+cd frontend && npm run dev
 
 # Terminal 3
-cd mobile
-npx expo start
+cd mobile && npx expo start
 ```
 
 Notes:

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Edit, Trash2, Lock, Unlock, Eye, Search, Filter, Users, TrendingUp, Shield, Building, Mail, Phone, X, ChevronLeft, ChevronRight, User } from 'lucide-react';
+import { Plus, Edit, Trash2, Lock, Unlock, Eye, Search, Filter, Users, TrendingUp, Shield, Building, Mail, Phone, X, ChevronLeft, ChevronRight, User as UserIcon } from 'lucide-react';
 import { Modal, Table, Badge, AddEditForm } from '../../components';
 import { userService, facultyService } from '../../services';
 import { USER_ROLES, USER_STATUS } from '../../utils/constants';
@@ -79,7 +79,7 @@ const AdminTable: React.FC = () => {
                   }}
                 />
               ) : (
-                <User className="h-5 w-5 text-university-gold-700 dark:text-university-gold-300" />
+                <UserIcon className="h-5 w-5 text-university-gold-700 dark:text-university-gold-300" />
               )}
             </div>
             <div className="ml-3">
@@ -566,7 +566,7 @@ const AdminTable: React.FC = () => {
                               }}
                             />
                           ) : (
-                            <User className="h-6 w-6 text-white" />
+                            <UserIcon className="h-6 w-6 text-white" />
                           )}
                         </div>
                         <div className="min-w-0 flex-1">

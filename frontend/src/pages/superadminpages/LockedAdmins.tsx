@@ -16,7 +16,7 @@ import {
   Calendar,
   X,
   CheckCircle,
-  User
+  User as UserIcon
 } from 'lucide-react';
 import { FilterForm, Button, Modal, Table, Badge } from '../../components';
 import { userService } from '../../services';
@@ -94,7 +94,7 @@ const LockedAdminsTable: React.FC = () => {
                     }}
                   />
                 ) : (
-                  <User className="h-6 w-6 text-university-gold-700 dark:text-university-gold-400" />
+                  <UserIcon className="h-6 w-6 text-university-gold-700 dark:text-university-gold-400" />
                 )}
               </div>
               <div className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-university-red-500 border-2 border-white dark:border-slate-800 shadow-sm">
