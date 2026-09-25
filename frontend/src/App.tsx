@@ -5,6 +5,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 import { 
   SignIn, 
@@ -294,6 +295,7 @@ export default function App() {
               <ScrollToTop />
               <AppRoutes />
               <Toaster position="top-right" containerClassName="z-[100000] mt-20" />
+              <SpeedInsights />
             </Router>
           </ModalProvider>
         </SidebarProvider>
