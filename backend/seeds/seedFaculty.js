@@ -17,17 +17,9 @@ if (!MONGO_URI) {
 
 const DB_NAME = process.env.DB_NAME;
 if (DB_NAME && (MONGO_URI.includes('mongodb://') || MONGO_URI.includes('mongodb+srv://'))) {
-  const dbNamePattern = /\/([^/?]+)(\?|$)/;
-  const match = MONGO_URI.match(dbNamePattern);
-
-  if (match && match[1] && match[1] !== DB_NAME) {
-    MONGO_URI = MONGO_URI.replace(dbNamePattern, `/${DB_NAME}$2`);
-  } else if (!match || !match[1]) {
-    if (MONGO_URI.includes('?')) {
-      MONGO_URI = MONGO_URI.replace('?', `/${DB_NAME}?`);
-    } else {
-      MONGO_URI = `${MONGO_URI}/${DB_NAME}`;
-    }
+  const uriParts = MONGO_URI.match(/^(mongodb(?:\+srv)?:\/\/[^/?]+)(?:\/[^?]*)?(\?.*)?$/);
+  if (uriParts) {
+    MONGO_URI = `${uriParts[1]}/${DB_NAME}${uriParts[2] || ''}`;
   }
 }
 
