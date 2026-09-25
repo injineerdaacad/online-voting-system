@@ -3,6 +3,7 @@ import fs from 'fs-extra';
 import fsNode from 'fs';
 import axios from 'axios';
 import path from 'path';
+import os from 'os';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -23,7 +24,9 @@ export const downloadAndUploadImage = async (imageUrl, folder = 'students', stud
       };
     }
 
-    const tempDir = path.join(__dirname, '../temp');
+    const tempDir = process.env.VERCEL
+      ? path.join(os.tmpdir(), 'temp')
+      : path.join(__dirname, '../temp');
     await fs.ensureDir(tempDir);
 
     const response = await axios({
@@ -70,7 +73,9 @@ export const downloadAndUploadImage = async (imageUrl, folder = 'students', stud
     };
   } catch (error) {
 
-    const tempDir = path.join(__dirname, '../temp');
+    const tempDir = process.env.VERCEL
+      ? path.join(os.tmpdir(), 'temp')
+      : path.join(__dirname, '../temp');
     if (await fs.pathExists(tempDir)) {
       const files = await fs.readdir(tempDir);
       for (const file of files) {

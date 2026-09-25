@@ -1,12 +1,16 @@
 import multer from "multer";
 import path from "path";
+import os from "os";
 import fs from "fs-extra";
 import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const uploadsDir = path.join(__dirname, "../uploads");
+// Serverless filesystems (Vercel) are read-only except for the OS temp dir
+const uploadsDir = process.env.VERCEL
+  ? path.join(os.tmpdir(), "uploads")
+  : path.join(__dirname, "../uploads");
 fs.ensureDirSync(uploadsDir);
 
 const storage = multer.diskStorage({
