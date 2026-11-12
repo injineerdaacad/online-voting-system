@@ -5,6 +5,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import path from "path";
 import { fileURLToPath } from "url";
+import mongoose from "mongoose";
 import { connectDB } from "./config/dbConfig.js";
 import { initSocket } from "./config/socketConfig.js";
 import { buildOriginMatcher } from "./utils/corsOriginMatcher.js";
@@ -72,6 +73,28 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(cookieParser());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+app.get("/api/health", (req, res) => {
+  res.json({
+    status: "ok",
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    environment: process.env.NODE_ENV || "development",
+    database: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
+  });
+});
+
+// Make sure the database is connected before handling API requests.
+// Answers 503 (with CORS headers) instead of crashing when it is unreachable.
+app.use("/api", async (req, res, next) => {
+  if (mongoose.connection.readyState === 1) return next();
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    res.status(503).json({ error: "Database temporarily unavailable. Please try again." });
+  }
+});
+
 app.use("/api/auth", authRoutes);
 app.use("/api/sessions", sessionRoutes);
 app.use("/api/users", userRoutes);
@@ -85,14 +108,6 @@ app.use("/api/results", resultRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/ai", aiAssistantRoutes);
 
-app.get("/api/health", (req, res) => {
-  res.json({
-    status: "ok",
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime(),
-    environment: process.env.NODE_ENV || "development",
-  });
-});
 
 app.use((req, res, next) => {
   if (
@@ -143,16 +158,14 @@ server.on("error", (error) => {
   process.exit(1);
 });
 
-connectDB()
-  .then(() => {
-    server.listen(PORT, HOST, () => {
-      console.log(`✅ Server listening on ${HOST}:${PORT}`);
-    });
-  })
-  .catch((err) => {
-    console.error("❌ Server startup failed:", err.message);
-    process.exit(1);
-  });
+server.listen(PORT, HOST, () => {
+  console.log(`✅ Server listening on ${HOST}:${PORT}`);
+});
+
+// Connect in the background; requests wait for it via the /api middleware.
+connectDB().catch((err) => {
+  console.error("❌ Initial database connection failed:", err.message);
+});
 
 process.on("SIGTERM", () => {
   server.close(() => {
