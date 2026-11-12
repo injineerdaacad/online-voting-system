@@ -39,9 +39,8 @@ Primary use cases:
 
 ## Live Deployments
 - GitHub Repository: https://github.com/injineerdaacad/online-voting-system.git
-- Backend API Live: https://online-voting-system-production-d849.up.railway.app
-- Frontend Dashboard Live: https://online-voting-system-mauve-three.vercel.app
-- Mobile Preview (Expo) Live: https://expo.dev/preview/update?message=My+App&updateRuntimeVersion=1.0.0&createdAt=2026-03-27T13%3A39%3A03.108Z&slug=exp&projectId=ba385ef3-aae4-4b77-934d-466120282920&group=71b66ec8-cca4-4b81-8367-9c895f96aaae
+- Backend API Live: https://ovs-api.kalsooni.com
+- Frontend Dashboard Live: https://ovs.kalsooni.com
 
 ## Architecture
 
@@ -240,7 +239,7 @@ docker ps
 | Service  | URL                       |
 | -------- | ------------------------- |
 | Frontend | http://localhost:5173     |
-| Backend  | http://localhost:3000     |
+| Backend  | http://localhost:5000     |
 | Mobile   | http://localhost:8081     |
 
 ### Default Login
@@ -344,10 +343,11 @@ VITE_API_URL=http://localhost:5000
 ```
 
 ### Mobile
-The mobile app currently reads API base URL from:
-- `mobile/constants/api.js`
+The mobile app reads the API base URL from `mobile/.env`:
 
-Update `API_URL` there for your environment.
+```bash
+EXPO_PUBLIC_API_URL=http://localhost:5000
+```
 
 ## Database Seeding
 Run in this order:
@@ -363,7 +363,7 @@ node seeds/seedFacultyAdmins.js
 ## API Reference
 Base URLs:
 - Local: `http://localhost:5000`
-- Live backend: `https://online-voting-system-production-d849.up.railway.app`
+- Live backend: `https://ovs-api.kalsooni.com`
 
 ### Health
 - `GET /api/health`
@@ -479,9 +479,8 @@ Rooms:
   - CORS origins
   - Cloudinary (if used)
 - Current live links:
-  - Backend: https://online-voting-system-production-d849.up.railway.app
-  - Frontend Live: https://online-voting-system-mauve-three.vercel.app
-  - Mobile (Expo preview) Live: https://expo.dev/preview/update?message=My+App&updateRuntimeVersion=1.0.0&createdAt=2026-03-27T13%3A39%3A03.108Z&slug=exp&projectId=ba385ef3-aae4-4b77-934d-466120282920&group=71b66ec8-cca4-4b81-8367-9c895f96aaae
+  - Backend: https://ovs-api.kalsooni.com
+  - Frontend Live: https://ovs.kalsooni.com
 
 ## Roles and Access
 
