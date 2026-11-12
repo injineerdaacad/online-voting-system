@@ -1,18 +1,23 @@
-// Demo data for showing the system (interview / presentation).
+// Sample data for showing the system (interview / presentation).
 //
-//   node seeds/seedDemo.js          remove old demo data, then create it again
-//   node seeds/seedDemo.js --reset  only remove the demo data
+//   SAMPLE_ADMIN_PASSWORD=... SAMPLE_STUDENT_PASSWORD=... node seeds/seedSampleData.js
+//       remove old sample data, then create it again
+//   node seeds/seedSampleData.js --reset
+//       only remove the sample data
+//
+// Passwords come from the environment only, never from this file (the repo
+// is public). SAMPLE_STUDENT_PASSWORD must be 6 characters (app login rule).
 //
 // Creates, in the faculty of the first real student (or the first faculty):
-//   - Demo students DEMO001..DEMO012 (they vote / stand as candidates)
+//   - Students B3SC601..B3SC612 (they vote / stand as candidates)
 //   - Tester students TEST01..TEST06 (never vote; for people trying the app)
-//   - A demo Super Admin "demo.admin" for the dashboard
+//   - A Super Admin "admin" for the dashboard
 //   - Election 1: Student Union, today 08:00-12:00   -> Closed, with results
 //   - Election 2: Sports & Culture, now until Friday   -> Active, some votes
 //   - Election 3: Faculty Leadership, all of Saturday  -> Upcoming until Saturday
 //
-// Only documents created here are removed on re-run (matched by the IDs,
-// username and election titles below). Times are Africa/Mogadishu (UTC+3).
+// Only documents created here are removed on re-run: students matched by
+// ID and name, the admin by username and email, elections by title. Times are Africa/Mogadishu (UTC+3).
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import { ensureDatabaseName } from "../config/dbConfig.js";
@@ -25,9 +30,8 @@ import { Department } from "../models/departmentModel.js";
 
 dotenv.config();
 
-const STUDENT_PASSWORD = "vote26";
-const ADMIN_USERNAME = "demo.admin";
-const ADMIN_PASSWORD = "Demo@2026";
+const ADMIN_USERNAME = "admin";
+const ADMIN_EMAIL = "admin@ovs.kalsooni.com";
 
 const TITLES = {
   union: "SNU Student Union Election 2026",
@@ -35,7 +39,7 @@ const TITLES = {
   faculty: "Faculty of Science Leadership Election 2026",
 };
 
-const DEMO_STUDENTS = [
+const SAMPLE_STUDENTS = [
   "Abdirahman Hassan Ali", "Hodan Mohamed Abdi", "Mohamed Ali Farah",
   "Fadumo Ahmed Warsame", "Abdullahi Yusuf Omar", "Sahra Abdi Nur",
   "Ahmed Ismail Jama", "Ayaan Hussein Mohamud", "Omar Abdikadir Aden",
@@ -55,12 +59,16 @@ const daysUntilSaturday = (base) => {
   return (6 - dow + 7) % 7 || 7;
 };
 
-const studentIds = () => [
-  ...DEMO_STUDENTS.map((_, i) => `DEMO${String(i + 1).padStart(3, "0")}`),
-  ...Array.from({ length: TESTERS }, (_, i) => `TEST${String(i + 1).padStart(2, "0")}`),
+const sampleId = (i) => `B3SC${601 + i}`;
+const testerId = (i) => `TEST${String(i + 1).padStart(2, "0")}`;
+const testerName = (i) => `Test Student ${i + 1}`;
+const seededStudents = () => [
+  ...SAMPLE_STUDENTS.map((name, i) => ({ student_id: sampleId(i), full_name: name })),
+  ...Array.from({ length: TESTERS }, (_, i) => ({ student_id: testerId(i), full_name: testerName(i) })),
 ];
+const studentIds = () => seededStudents().map((s) => s.student_id);
 
-async function removeDemo() {
+async function removeSampleData() {
   const elections = await Election.find({ title: { $in: Object.values(TITLES) } }).select("_id");
   const electionIds = elections.map((e) => e._id);
   const votes = await Vote.deleteMany({ election_id: { $in: electionIds } });
@@ -71,7 +79,10 @@ async function removeDemo() {
   );
   const removedElections = await Election.deleteMany({ _id: { $in: electionIds } });
   const users = await User.deleteMany({
-    $or: [{ student_id: { $in: studentIds() } }, { username: ADMIN_USERNAME }],
+    $or: [
+      ...seededStudents().map((s) => ({ role: "Student", ...s })),
+      { username: ADMIN_USERNAME, email: ADMIN_EMAIL },
+    ],
   });
   console.log(`Removed: ${removedElections.deletedCount} elections, ${candidates.deletedCount} candidates, ` +
     `${votes.deletedCount} votes, ${users.deletedCount} users`);
@@ -88,11 +99,11 @@ async function pickFacultyAndDepartments() {
   return { faculty, departments };
 }
 
-async function createStudent(student_id, full_name, faculty, department, superAdmin) {
+async function createStudent(student_id, full_name, faculty, department, superAdmin, password) {
   const user = new User({
     student_id,
     full_name,
-    password: STUDENT_PASSWORD,
+    password,
     role: "Student",
     status: "Active",
     faculty_id: faculty._id,
@@ -141,25 +152,40 @@ async function castVotes(election, byPosition, voters, picks, castAt) {
 }
 
 async function seed() {
+  const ADMIN_PASSWORD = process.env.SAMPLE_ADMIN_PASSWORD;
+  const STUDENT_PASSWORD = process.env.SAMPLE_STUDENT_PASSWORD;
+  if (!ADMIN_PASSWORD || ADMIN_PASSWORD.length < 8) {
+    throw new Error("Set SAMPLE_ADMIN_PASSWORD (at least 8 characters).");
+  }
+  if (!STUDENT_PASSWORD || STUDENT_PASSWORD.length !== 6) {
+    throw new Error("Set SAMPLE_STUDENT_PASSWORD (exactly 6 characters).");
+  }
   const superAdmin = await User.findOne({ role: "Super Admin", username: { $ne: ADMIN_USERNAME } });
   if (!superAdmin) throw new Error("No Super Admin found. Run seeds/seedSuperAdmin.js first.");
   const { faculty, departments } = await pickFacultyAndDepartments();
   console.log(`Faculty: ${faculty.name} (${departments.length} departments)`);
 
-  const demo = [];
-  for (let i = 0; i < DEMO_STUDENTS.length; i++) {
-    demo.push(await createStudent(`DEMO${String(i + 1).padStart(3, "0")}`, DEMO_STUDENTS[i],
-      faculty, departments[i % departments.length], superAdmin));
+  const taken = await User.findOne({
+    $or: [{ student_id: { $in: studentIds() } }, { username: ADMIN_USERNAME }],
+  });
+  if (taken) {
+    throw new Error(`"${taken.student_id || taken.username}" already exists and was not created by this script.`);
   }
-  for (let i = 1; i <= TESTERS; i++) {
-    await createStudent(`TEST${String(i).padStart(2, "0")}`, `Test Student ${i}`,
-      faculty, departments[(i - 1) % departments.length], superAdmin);
+
+  const students = [];
+  for (let i = 0; i < SAMPLE_STUDENTS.length; i++) {
+    students.push(await createStudent(sampleId(i), SAMPLE_STUDENTS[i],
+      faculty, departments[i % departments.length], superAdmin, STUDENT_PASSWORD));
+  }
+  for (let i = 0; i < TESTERS; i++) {
+    await createStudent(testerId(i), testerName(i),
+      faculty, departments[i % departments.length], superAdmin, STUDENT_PASSWORD);
   }
 
   const admin = new User({
     username: ADMIN_USERNAME,
-    full_name: "Demo Admin",
-    email: "demo.admin@example.com",
+    full_name: "Admin",
+    email: ADMIN_EMAIL,
     password: ADMIN_PASSWORD,
     role: "Super Admin",
     status: "Active",
@@ -182,20 +208,20 @@ async function seed() {
   });
   const unionCands = await addCandidates(union, {
     President: [
-      { student: demo[0], manifesto: "Transparent student budget and a 24/7 library." },
-      { student: demo[1], manifesto: "More internships through partnerships with local companies." },
-      { student: demo[2], manifesto: "Better campus Wi-Fi and online course materials." },
+      { student: students[0], manifesto: "Transparent student budget and a 24/7 library." },
+      { student: students[1], manifesto: "More internships through partnerships with local companies." },
+      { student: students[2], manifesto: "Better campus Wi-Fi and online course materials." },
     ],
     "Vice President": [
-      { student: demo[3], manifesto: "A student support desk in every faculty." },
-      { student: demo[4], manifesto: "Monthly town halls between students and administration." },
+      { student: students[3], manifesto: "A student support desk in every faculty." },
+      { student: students[4], manifesto: "Monthly town halls between students and administration." },
     ],
     Secretary: [
-      { student: demo[5], manifesto: "Publish every Student Union decision online." },
-      { student: demo[6], manifesto: "Faster replies to student complaints." },
+      { student: students[5], manifesto: "Publish every Student Union decision online." },
+      { student: students[6], manifesto: "Faster replies to student complaints." },
     ],
   }, superAdmin);
-  await castVotes(union, unionCands, demo.slice(0, 11), [
+  await castVotes(union, unionCands, students.slice(0, 11), [
     [1, 0, 0], [1, 1, 0], [0, 0, 1], [1, 0, 0], [2, 1, 0], [1, 0, 1],
     [0, 0, 0], [1, 1, 0], [2, 0, 1], [1, 0, 0], [0, 1, 0],
   ], new Date(unionStart.getTime() + 20 * 60 * 1000));
@@ -212,11 +238,11 @@ async function seed() {
   });
   const sportsCands = await addCandidates(sports, {
     "Sports & Culture Secretary": [
-      { student: demo[7], manifesto: "An inter-faculty football league every semester." },
-      { student: demo[8], manifesto: "A yearly Somali culture and poetry festival." },
+      { student: students[7], manifesto: "An inter-faculty football league every semester." },
+      { student: students[8], manifesto: "A yearly Somali culture and poetry festival." },
     ],
   }, superAdmin);
-  await castVotes(sports, sportsCands, demo.slice(0, 5), [[0], [1], [0], [0], [1]],
+  await castVotes(sports, sportsCands, students.slice(0, 5), [[0], [1], [0], [0], [1]],
     new Date(now.getTime() - 50 * 60 * 1000));
 
   // 3) Saturday 08:00-23:59: Upcoming until then, Active all Saturday
@@ -232,13 +258,13 @@ async function seed() {
   });
   await addCandidates(facultyElection, {
     "Faculty Representative": [
-      { student: demo[9], manifesto: "Modern lab equipment for every department." },
-      { student: demo[10], manifesto: "Peer tutoring for first-year students." },
-      { student: demo[11], manifesto: "A faculty research day with industry guests." },
+      { student: students[9], manifesto: "Modern lab equipment for every department." },
+      { student: students[10], manifesto: "Peer tutoring for first-year students." },
+      { student: students[11], manifesto: "A faculty research day with industry guests." },
     ],
   }, superAdmin);
 
-  console.log(`Created ${demo.length} demo students, ${TESTERS} testers, admin "${ADMIN_USERNAME}", 3 elections`);
+  console.log(`Created ${students.length} students, ${TESTERS} testers, admin "${ADMIN_USERNAME}", 3 elections`);
   console.log(`  ${TITLES.union}: Closed (${unionStart.toISOString()} - ${unionEnd.toISOString()})`);
   console.log(`  ${TITLES.sports}: Active until ${sports.end_time.toISOString()}`);
   console.log(`  ${TITLES.faculty}: ${facultyElection.start_time.toISOString()} - ${facultyElection.end_time.toISOString()}`);
@@ -248,7 +274,7 @@ const run = async () => {
   const uri = ensureDatabaseName(process.env.MONGODB_URI || process.env.DB);
   await mongoose.connect(uri, { dbName: process.env.DB_NAME, serverSelectionTimeoutMS: 15000 });
   try {
-    await removeDemo();
+    await removeSampleData();
     if (!process.argv.includes("--reset")) await seed();
   } finally {
     await mongoose.disconnect();
@@ -256,6 +282,6 @@ const run = async () => {
 };
 
 run().catch((err) => {
-  console.error("❌ Demo seed failed:", err.message);
+  console.error("❌ Sample data seed failed:", err.message);
   process.exit(1);
 });
